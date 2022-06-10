@@ -16,7 +16,7 @@ const FILES_TO_CACHE = [
   "./dist/schedule.bundle.js"
 ];
 
-// Install service-worker
+// Install service-worker, cache resources
 
 // "e" is short for "evt", which is short for "event"
 self.addEventListener('install', function (e) {
@@ -28,14 +28,17 @@ self.addEventListener('install', function (e) {
   )
 });
 
-// Activate service-worker
+// Activate service-worker, delete outdated caches
 
 self.addEventListener('activate', function(e) {
   e.waitUntil(
     caches.keys().then(function(keyList) {
+      // `keyList` contains all cache names under your username.github.io
+      // filter out ones that has this app prefix to create keeplist
       let cacheKeeplist = keyList.filter(function(key) {
         return key.indexOf(APP_PREFIX);
       });
+      // add current cache name to keeplist
       cacheKeeplist.push(CACHE_NAME);
 
       return Promise.all(
@@ -50,7 +53,7 @@ self.addEventListener('activate', function(e) {
   );
 });
 
-// Retrieve info from the cache
+// Retrieve info from the cache, respond with cached resources
 
 self.addEventListener('fetch', function(e) {
   console.log('fetch request : ' + e.request.url)
@@ -68,4 +71,4 @@ self.addEventListener('fetch', function(e) {
     // return request || fetch(e.request)
     })
   )
-})
+});

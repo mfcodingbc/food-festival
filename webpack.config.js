@@ -1,6 +1,6 @@
 const webpack = require("webpack")
 const path = require("path");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 module.exports = {
@@ -13,11 +13,12 @@ module.exports = {
   output: {
     filename: "[name].bundle.js",
     path: __dirname + "/dist"
+    // path: path.join(__dirname + "/dist"),
   },
   module: {
     rules: [
       {
-        test: /\.jpg$/i,
+        test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -56,11 +57,13 @@ module.exports = {
     theme_color: "#ffffff",
     fingerprints: false,
     inject: false,
-    icons: [{
-      src: path.resolve("assets/img/icons/icon-512x512.png"),
-      sizes: [96, 128, 192, 256, 384, 512],
-      destination: path.join("assets", "icons")
-    }]
+    icons: [
+      {
+        src: path.resolve("assets/img/icons/icon-512x512.png"),
+        sizes: [96, 128, 192, 256, 384, 512],
+        destination: path.join("assets", "icons")
+      }
+    ]
   })
   ],
   mode: "development"
